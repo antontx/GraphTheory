@@ -7,8 +7,8 @@ public class Main {
             Graph graph = graphTool.dotFileToGraph(fileName);
 
             Vertex WI = graph.getVertices().get(0);
-            graph.dijkstra2(WI);
-            System.out.println(graph.bfs(WI));
+            graph.dijkstra3(WI);
+//            System.out.println(graph.bfs(WI));
 
 
             graphTool.graphToDotFile(graph, "out_" + fileName );

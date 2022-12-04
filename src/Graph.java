@@ -116,7 +116,7 @@ public class Graph {
         }
         distance.put(from,0);
 
-        HashMap<Vertex, Vertex> m1 = new HashMap<>();
+        HashSet<Vertex> m1 = new HashSet<>();
         HashMap<Vertex, Vertex> previous = new HashMap<>();
         Queue<Vertex> m2 = new LinkedList<>();
         Vertex cVertex = null;
@@ -132,21 +132,21 @@ public class Graph {
             int minDistance = Integer.MAX_VALUE;
             Vertex minVertex = null;
             for (Vertex v : vertices) {
-                if (!m1.containsKey(v) && distance.get(v) <= minDistance){
+                if (!m1.contains(v) && distance.get(v) <= minDistance){
                     minDistance = distance.get(v);
                     minVertex = v;
                 }
             }
 
             //make smallest vertex the current vertex & add previous vertex to m1 with key to backtrack
-            m1.put(minVertex,previous.get(minVertex));
+            m1.add(minVertex);
             cVertex = minVertex;
             m2.remove(cVertex);
 
             //add all neigbours to m2
             neighbours = cVertex.getNeighbours();
             for (Vertex neighbour : neighbours) {
-                if (!m1.containsKey(neighbour) && !m2.contains(neighbour)){
+                if (!m1.contains(neighbour) && !m2.contains(neighbour)){
                     m2.add(neighbour);
                 }
             }
@@ -165,10 +165,69 @@ public class Graph {
             System.out.println("distances: "+ distance);
             System.out.println("m2: " + m2);
             System.out.println("m1: " + m1);
+            System.out.println("prev:" + previous);
         }
+        return distance;
+    }
+
+    public HashMap<Vertex, Integer> dijkstra3(Vertex from) {
+        HashMap<Vertex, Integer> distance = new HashMap<>();
+        for (Vertex v : vertices) {
+            distance.put(v, Integer.MAX_VALUE);
+        }
+        distance.put(from, 0);
+
+        HashSet<Vertex> m1 = new HashSet<>();
+        HashMap<Vertex, Vertex> previous = new HashMap<>();
+        HashSet<Vertex> m2 = new HashSet<>();
+        Vertex cVertex = null;
+        List<Vertex> neighbours;
+        Boolean start = true;
 
 
+        while (!m2.isEmpty() || start) {
+            start = false;
 
+
+            //find smallest, not locked distance & corresponding vertex
+            int minDistance = Integer.MAX_VALUE;
+            Vertex minVertex = null;
+            for (Vertex v : vertices) {
+                if (!m1.contains(v) && distance.get(v) <= minDistance) {
+                    minDistance = distance.get(v);
+                    minVertex = v;
+                }
+            }
+
+            //make smallest vertex the current vertex & add previous vertex to m1 with key to backtrack
+            m1.add(minVertex);
+            cVertex = minVertex;
+            m2.remove(cVertex);
+
+            //add all neigbours to m2
+            neighbours = cVertex.getNeighbours();
+            for (Vertex neighbour : neighbours) {
+                if (!m1.contains(neighbour)) {
+                    m2.add(neighbour);
+                }
+            }
+
+
+            //go through m2 and check if a new shorter distance to a neighbour was found
+            int dist = 0;
+            for (Vertex v : m2) {
+                dist = cVertex.getDirectDistance(v);
+                if (dist > -1 && distance.get(cVertex) + dist < distance.get(v)) {
+                    distance.put(v, distance.get(cVertex) + dist);
+                    previous.put(v, cVertex);
+                }
+            }
+
+            System.out.println("m2: " + m2);
+            System.out.println("m1: " + m1);
+            System.out.println("prev:" + previous);
+            System.out.println("distances: " + distance);
+        }
         return distance;
     }
 
