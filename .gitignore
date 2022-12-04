@@ -1,2 +1,11 @@
 # Project exclude paths
 /out/
+.gitignore
+A1.dot
+A2.dot
+out_A1.dot
+out_A2.dot
+src/BST.java
+src/DotGraphTool.java
+src/Node.java
+src/VertexDistance.java
