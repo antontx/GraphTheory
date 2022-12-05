@@ -67,7 +67,7 @@ public class Graph {
             for (Vertex neighbour : neighbours) {
                 if (!visited.contains(neighbour)) {
                     stack.push(neighbour);
-                }
+                } // else: zirkel
             }
         }
 
